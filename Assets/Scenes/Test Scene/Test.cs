@@ -19,6 +19,12 @@ public class Test : MonoBehaviour
         text.text = "OK Detected.";
     }
 
+    public void onPointDetected()
+    {
+        Debug.Log("Point Detected.");
+        text.text = "Point Detected.";
+    }
+
     public void onNothingDetected()
     {
         Debug.Log("Nothing Detected.");
