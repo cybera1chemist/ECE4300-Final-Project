@@ -16,15 +16,17 @@ public class HandController : MonoBehaviour
     [SerializeField] private float fireSpeedThreshold = 1.2f; // m/s
 
     [Header("References")]
-    [SerializeField] private MagicBall magicBall;
+    [SerializeField] private MagicBall magicBallPrefab;
 
     public HandState curState { get; private set; }
-    public Color curColor { get; private set; }
 
-    private bool hasLoggedMissingBridge;
+    public MagicBall magicBall;
+    private bool hasBallInHand = false;
+    private LeapInputBridge bridge;
 
     private void Start()
     {
+        bridge = LeapInputBridge.Instance;
         curState = HandState.Idle;
     }
 
@@ -32,37 +34,34 @@ public class HandController : MonoBehaviour
     {
         if (curState != HandState.Prepare) return;
 
-        var bridge = LeapInputBridge.Instance;
-        if (bridge == null)
+        if (magicBall != null)
         {
-            if (!hasLoggedMissingBridge)
-            {
-                Debug.LogError("LeapInputBridge.Instance is null. Ensure a LeapInputBridge object is active in the scene.", this);
-                hasLoggedMissingBridge = true;
-            }
-            return;
+            magicBall.UpdatePosition(bridge.GetHandPosition(side), bridge.GetPalmNormal(side));
         }
-
-        magicBall.UpdatePosition(bridge.GetHandPosition(side), bridge.GetPalmNormal(side));
+        
     }
     
     #region Called by PoseDetector in Unity Editor
     public void OnPalmDetected()
     {
-        SetState(HandState.Prepare);
+        SetState(HandState.Prepare);        
     }
     public void OnPalmLost()
     {
-        if (curState == HandState.Prepare)
-        {
-            SetState(HandState.Idle);
-        }
+        
     }
+
     public void OnFistDetected()
     {
         if (curState != HandState.Prepare) return;
-        SetState(HandState.Fire);
-
+        // Add special particles later
+    }
+    public void WhileFistDetected()
+    {
+        Vector3 velocity = LeapInputBridge.Instance.GetVelocity(side);
+        if (velocity.magnitude >= fireSpeedThreshold)        {
+            SetState(HandState.Fire);
+        }
     }
     public void OnFistLost()
     {
@@ -80,15 +79,29 @@ public class HandController : MonoBehaviour
         {
             case HandState.Idle:
                 Debug.Log("Player's " + side + " hand switched to idle state.");
-                magicBall.SetVisible(false);
+
+                hasBallInHand = false;
+
+                if (magicBall != null)
+                {
+                    magicBall.Cancel();
+                }
                 break;
+
             case HandState.Prepare:
                 Debug.Log("Player's " + side + " hand switched to prepare state.");
-                magicBall.SetVisible(true);
+                // Instantiate a new magic ball;
+                if (!hasBallInHand)
+                {
+                    magicBall = Instantiate(magicBallPrefab, transform.position, Quaternion.identity);
+                    hasBallInHand = true;
+                }
                 break;
+
             case HandState.Fire:
                 Debug.Log("Player's " + side + " hand switched to fire state.");
-                magicBall.SetVisible(false);
+                Vector3 v = LeapInputBridge.Instance.GetVelocity(side);
+                magicBall.Launch(v);
                 break;
         }
     }

@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class MagicBallVisual : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("References")]
+    [SerializeField] private ParticleSystem head;
+    [SerializeField] private ParticleSystem particle;
+
+    private void Start()
     {
-        
+        SetColor(new Color(0.5f, 0.5f, 0.5f, 1f));
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetColor(Color color)
     {
-        
+        // Set head color
+        var headMain = head.main;
+        headMain.startColor = color;
+
+        // Set particle color
+        var particleMain = particle.main;
+        particleMain.startColor = color;
     }
 }
