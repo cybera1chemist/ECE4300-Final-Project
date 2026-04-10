@@ -47,10 +47,10 @@ public class MagicBall : MonoBehaviour
     private Color MapColor(Vector3 delta)
     {   
         float r;
-        if (side == HandSide.Right)  r = 0.5f - delta.x / maxX;
-        else  r = 0.5f + delta.x / maxX;
-        float g = 0.5f - delta.y / maxY;
-        float b = 0.5f - delta.z / maxZ;
+        if (side == HandSide.Right)  r = 0.5f + delta.x / maxX;
+        else  r = 0.5f - delta.x / maxX;
+        float g = 0.5f + delta.y / maxY;
+        float b = 0.5f + delta.z / maxZ;
         return new Color(r, g, b, 1f);
     }
 

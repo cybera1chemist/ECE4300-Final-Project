@@ -59,7 +59,8 @@ public class HandController : MonoBehaviour
     public void WhileFistDetected()
     {
         Vector3 velocity = LeapInputBridge.Instance.GetVelocity(side);
-        if (velocity.magnitude >= fireSpeedThreshold)        {
+        if (velocity.magnitude >= fireSpeedThreshold && velocity.z > 0)        
+        {
             SetState(HandState.Fire);
         }
     }
