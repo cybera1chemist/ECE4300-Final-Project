@@ -94,6 +94,7 @@ public class HandController : MonoBehaviour
                 if (!hasBallInHand)
                 {
                     magicBall = Instantiate(magicBallPrefab, transform.position, Quaternion.identity);
+                    magicBall.SetSide(side);
                     hasBallInHand = true;
                 }
                 break;

@@ -22,6 +22,7 @@ public class MagicBall : MonoBehaviour
     private Color curColor;
     // For debug only, I want to see delta and color change in the editor
     public Vector3 delta;
+    private HandSide side;
 
     private Vector3 initialPos;
 
@@ -44,8 +45,10 @@ public class MagicBall : MonoBehaviour
     }
 
     private Color MapColor(Vector3 delta)
-    {
-        float r = 0.5f - delta.x / maxX;
+    {   
+        float r;
+        if (side == HandSide.Right)  r = 0.5f - delta.x / maxX;
+        else  r = 0.5f + delta.x / maxX;
         float g = 0.5f - delta.y / maxY;
         float b = 0.5f - delta.z / maxZ;
         return new Color(r, g, b, 1f);
@@ -60,6 +63,7 @@ public class MagicBall : MonoBehaviour
     }
     public Color GetColor() => curColor;
 
+    public void SetSide(HandSide handSide) => side = handSide;
     public void UpdatePosition(Vector3 palmPosition, Vector3 palmNormal)
     {
         if (launched) return;
