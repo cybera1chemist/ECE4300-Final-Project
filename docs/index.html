@@ -1,0 +1,510 @@
+
+<style>
+.sdd-tab { background:transparent; border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-md); padding:5px 12px; font-size:12px; cursor:pointer; color:var(--color-text-secondary); transition:all .15s; white-space:nowrap; }
+.sdd-tab.on { background:var(--color-background-primary); border-color:var(--color-border-primary); color:var(--color-text-primary); font-weight:500; }
+.sdd-tab:hover:not(.on) { background:var(--color-background-secondary); }
+.pane { display:none; } .pane.on { display:block; }
+.sec { font-size:11px; font-weight:500; letter-spacing:.06em; color:var(--color-text-tertiary); text-transform:uppercase; margin:1.25rem 0 .5rem; }
+.card { background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:.875rem 1.1rem; margin-bottom:8px; }
+.ct { font-size:13px; font-weight:500; margin:0 0 5px; font-family:var(--font-mono); color:var(--color-text-primary); }
+.cs { font-size:12px; color:var(--color-text-secondary); margin:0; line-height:1.6; }
+.cb { background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:.6rem .875rem; font-family:var(--font-mono); font-size:11.5px; line-height:1.7; margin:6px 0 0; color:var(--color-text-primary); white-space:pre; overflow-x:auto; }
+.g2 { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:8px; }
+.dep-row { display:flex; align-items:flex-start; gap:8px; font-size:12px; padding:5px 0; border-bottom:0.5px solid var(--color-border-tertiary); }
+.dep-row:last-child { border-bottom:none; }
+.mono { font-family:var(--font-mono); font-size:11.5px; }
+.note { font-size:12px; color:var(--color-text-secondary); background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:.5rem .75rem; margin-top:6px; line-height:1.6; }
+.tag { font-size:11px; padding:2px 7px; border-radius:99px; font-weight:500; display:inline-block; }
+.sub-card { background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:.6rem .875rem; }
+.sub-card .sc-t { font-size:12px; font-weight:500; margin:0 0 3px; font-family:var(--font-mono); }
+.sub-card .sc-d { font-size:12px; color:var(--color-text-secondary); margin:0; line-height:1.5; }
+.changed { border-left:2px solid var(--color-border-warning); padding-left:.75rem; border-radius:0; }
+</style>
+
+<div style="padding:1rem 0 0">
+<div style="margin-bottom:1rem">
+  <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+    <p style="font-size:18px;font-weight:500;margin:0">Chromamancer — software design document</p>
+    <span class="tag" style="background:var(--color-background-warning);color:var(--color-text-warning)">v2</span>
+  </div>
+  <p style="font-size:12px;color:var(--color-text-secondary);margin:3px 0 0">Unity + C# &middot; Ultraleap Unity Plugin &middot; ECE4300 Final Project</p>
+</div>
+<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:1.25rem">
+  <button class="sdd-tab on" onclick="sw('overview')">Overview</button>
+  <button class="sdd-tab" onclick="sw('input')">Input layer</button>
+  <button class="sdd-tab" onclick="sw('hand')">Hand &amp; ball</button>
+  <button class="sdd-tab" onclick="sw('combat')">Combat</button>
+  <button class="sdd-tab" onclick="sw('enemy')">Enemy</button>
+  <button class="sdd-tab" onclick="sw('stage')">Stage &amp; shop</button>
+  <button class="sdd-tab" onclick="sw('time')">Bullet time</button>
+  <button class="sdd-tab" onclick="sw('data')">Data flow</button>
+</div>
+
+<!-- OVERVIEW -->
+<div id="p-overview" class="pane on">
+  <div class="sec">System map — who owns what</div>
+  <div class="card">
+    <p class="ct">High-level dependency graph</p>
+    <p class="cs">Seven top-level systems. Arrows show "reads from / calls into". Pose detection is handled entirely by the Ultraleap plugin in the Inspector — no custom gesture recognition code.</p>
+    <div style="margin-top:10px">
+      <div class="dep-row"><span class="mono" style="min-width:200px;color:var(--color-text-info)">Ultraleap PoseDetector</span><span style="color:var(--color-text-tertiary);flex-shrink:0">→</span><span class="cs">Plugin-provided component. Fires UnityEvents for pose on/off. Zero custom code required for gesture recognition.</span></div>
+      <div class="dep-row"><span class="mono" style="min-width:200px;color:var(--color-text-info)">LeapInputBridge</span><span style="color:var(--color-text-tertiary);flex-shrink:0">→</span><span class="cs">Thin wrapper. Reads only what PoseDetector doesn't expose: hand world position, velocity, and palm normal each frame.</span></div>
+      <div class="dep-row"><span class="mono" style="min-width:200px">HandController (×2)</span><span style="color:var(--color-text-tertiary);flex-shrink:0">→</span><span class="cs">Receives pose events from PoseDetector. Reads position/velocity from LeapInputBridge. Owns HandState and drives MagicBall.</span></div>
+      <div class="dep-row"><span class="mono" style="min-width:200px">MagicBall (×2)</span><span style="color:var(--color-text-tertiary);flex-shrink:0">→</span><span class="cs">Single class: exists in hand during Prepare, becomes in-flight object on Fire. No separate Projectile class.</span></div>
+      <div class="dep-row"><span class="mono" style="min-width:200px;color:var(--color-text-warning)">EnemyController</span><span style="color:var(--color-text-tertiary);flex-shrink:0">→</span><span class="cs">Reads StageManager for spawn config. Notifies on death via event.</span></div>
+      <div class="dep-row"><span class="mono" style="min-width:200px;color:var(--color-text-success)">StageManager</span><span style="color:var(--color-text-tertiary);flex-shrink:0">→</span><span class="cs">Orchestrates waves, shop, progression, TimeScaleManager.</span></div>
+      <div class="dep-row"><span class="mono" style="min-width:200px;color:var(--color-text-success)">ShopManager</span><span style="color:var(--color-text-tertiary);flex-shrink:0">→</span><span class="cs">Reads PlayerStats. Writes stat modifiers on purchase.</span></div>
+      <div class="dep-row"><span class="mono" style="min-width:200px">PlayerStats</span><span style="color:var(--color-text-tertiary);flex-shrink:0">→</span><span class="cs">Plain data object. All systems read; ShopManager writes.</span></div>
+      <div class="dep-row"><span class="mono" style="min-width:200px">ColorMath</span><span style="color:var(--color-text-tertiary);flex-shrink:0">→</span><span class="cs">Static utility. Pure functions, no MonoBehaviour. No deps.</span></div>
+      <div class="dep-row"><span class="mono" style="min-width:200px">TimeScaleManager</span><span style="color:var(--color-text-tertiary);flex-shrink:0">→</span><span class="cs">Singleton. Wraps Time.timeScale. Called by HandController on state entry/exit.</span></div>
+    </div>
+  </div>
+  <div class="sec">Scene hierarchy</div>
+  <div class="card">
+    <div class="cb">GameScene
+├── [GameManager]          — StageManager, ShopManager, PlayerStats
+├── [LeapRig]              — LeapInputBridge
+│   ├── LeftHandAnchor     — HandController (left), MagicBall (left)
+│   │   ├── PoseDetector   — "PalmUp" pose asset  (Ultraleap plugin)
+│   │   └── PoseDetector   — "Fist" pose asset    (Ultraleap plugin)
+│   └── RightHandAnchor    — HandController (right), MagicBall (right)
+│       ├── PoseDetector   — "PalmUp" pose asset
+│       └── PoseDetector   — "Fist" pose asset
+├── [Arena]
+│   ├── SpawnPoint         — EnemySpawner
+│   └── Road               — NavMesh surface
+└── [UI]                   — HUD, ShopUI, BulletTimeIndicator</div>
+    <div class="note">Each HandAnchor has two PoseDetector components — one for each pose. Their OnPoseDetected / OnPoseLost UnityEvents are wired in the Inspector to HandController.OnPalmUpDetected(), HandController.OnFistDetected(), etc. No per-frame gesture polling in code.</div>
+  </div>
+  <div class="sec">Key design decisions</div>
+  <div class="g2">
+    <div class="card changed">
+      <p class="ct">Pose detection fully delegated to plugin</p>
+      <p class="cs">PalmUp and Fist poses are Scriptable Objects configured in the Ultraleap plugin. HandController only receives callbacks — it contains no gesture math. This removes an entire layer of fragile hand-recognition code.</p>
+    </div>
+    <div class="card changed">
+      <p class="ct">MagicBall is both the held object and the projectile</p>
+      <p class="cs">There is one MagicBall per hand. It exists in the player's hand during Prepare, then detaches and flies on Fire. No separate Projectile class. MagicBall owns its full lifecycle: held → colored → in-flight → impact.</p>
+    </div>
+    <div class="card">
+      <p class="ct">LeapInputBridge is slimmed down</p>
+      <p class="cs">With pose detection handled by the plugin, LeapInputBridge only needs to expose per-frame data the plugin doesn't surface: normalized hand position (for color), world velocity (for fire direction), and tracking status.</p>
+    </div>
+    <div class="card">
+      <p class="ct">Enemy color drives damage via continuous HSV</p>
+      <p class="cs">Random hue at spawn. Damage is computed from hue distance to the inverse color — analog and smooth, not a zone lookup. Players learn to aim for the opposite corner of color space.</p>
+    </div>
+  </div>
+</div>
+
+<!-- INPUT -->
+<div id="p-input" class="pane">
+  <div class="sec">Ultraleap PoseDetector — plugin component (no custom code)</div>
+  <div class="card">
+    <p class="ct">What the plugin handles for you</p>
+    <p class="cs">Add a PoseDetector component to each hand anchor. Assign a pose ScriptableObject (e.g. "PalmUp", "Fist") in the Inspector. Wire the UnityEvents in the Inspector:</p>
+    <div class="cb">// Inspector wiring — no code needed:
+PoseDetector (PalmUp pose)
+    OnPoseDetected  →  HandController.OnPalmUpDetected()
+    OnPoseLost      →  HandController.OnPalmUpLost()
+
+PoseDetector (Fist pose)
+    OnPoseDetected  →  HandController.OnFistDetected()
+    OnPoseLost      →  (not needed — fist is sampled with velocity check)</div>
+    <div class="note">The Fist pose fires OnPoseDetected when the hand closes. HandController then checks if velocity also exceeds the throw threshold before triggering Fire. OnPoseLost for the fist is not needed since Fire is a one-frame event, not a sustained state.</div>
+  </div>
+
+  <div class="sec">LeapInputBridge.cs — MonoBehaviour, singleton (slimmed)</div>
+  <div class="card">
+    <p class="ct">Responsibility</p>
+    <p class="cs">The plugin handles pose recognition. LeapInputBridge only exposes the per-frame continuous data that the plugin doesn't surface as events: normalized hand position within the tracking volume (which drives color), hand velocity in world space (which drives fire direction and throw detection), and tracking status.</p>
+  </div>
+  <div class="card">
+    <p class="ct">Public API</p>
+    <div class="cb">public static LeapInputBridge Instance { get; private set; }
+
+// Called by HandController every frame during Prepare state:
+public Vector3 GetNormalizedPosition(HandSide side)
+// Returns hand position normalized 0-1 within tracking volume.
+// X→R, Y→G, Z→B for color mapping.
+
+// Called by HandController when fist pose fires:
+public Vector3 GetVelocity(HandSide side)
+// Returns world-space hand velocity in m/s (unscaled).
+
+public bool IsTracked(HandSide side)
+
+public enum HandSide { Left, Right }</div>
+  </div>
+  <div class="card">
+    <p class="ct">Private config</p>
+    <div class="cb">[SerializeField] private Vector3 trackingVolumeMin;  // world units, calibrated
+[SerializeField] private Vector3 trackingVolumeMax;
+
+// Reference to Ultraleap HandProvider or LeapServiceProvider
+[SerializeField] private LeapServiceProvider leapProvider;</div>
+    <div class="note">LeapInputBridge does NOT replicate the full hand data struct from v1. It answers exactly three questions: where is the hand (normalized), how fast is it moving, and is it tracked. Everything else is the plugin's job.</div>
+  </div>
+
+  <div class="sec">HandState enum (unchanged)</div>
+  <div class="card">
+    <div class="cb">public enum HandState {
+    Idle,     // hand not tracked, or no active pose
+    Prepare,  // PalmUp pose active — ball visible, bullet time on, color updating
+    Fire      // Fist pose fired AND velocity >= threshold — one-frame event
+}</div>
+  </div>
+</div>
+
+<!-- HAND & BALL -->
+<div id="p-hand" class="pane">
+  <div class="sec">HandController.cs — MonoBehaviour (one per hand)</div>
+  <div class="card">
+    <p class="ct">Public fields &amp; properties</p>
+    <div class="cb">[Header("Config")]
+[SerializeField] public HandSide side;
+[SerializeField] private float fireVelocityThreshold = 1.2f;  // m/s
+
+[Header("References")]
+[SerializeField] private MagicBall magicBall;
+
+// Runtime — read-only from outside
+public HandState CurrentState  { get; private set; }
+public Color     CurrentColor  { get; private set; }</div>
+  </div>
+  <div class="card changed">
+    <p class="ct">Pose event callbacks — wired from PoseDetector in Inspector</p>
+    <div class="cb">// Called by PoseDetector (PalmUp) → OnPoseDetected:
+public void OnPalmUpDetected() {
+    if (CurrentState == HandState.Idle)
+        SetState(HandState.Prepare);
+}
+
+// Called by PoseDetector (PalmUp) → OnPoseLost:
+public void OnPalmUpLost() {
+    if (CurrentState == HandState.Prepare)
+        SetState(HandState.Idle);
+}
+
+// Called by PoseDetector (Fist) → OnPoseDetected:
+public void OnFistDetected() {
+    if (CurrentState != HandState.Prepare) return;
+    Vector3 velocity = LeapInputBridge.Instance.GetVelocity(side);
+    if (velocity.magnitude >= fireVelocityThreshold)
+        SetState(HandState.Fire);
+    // If velocity too low: fist closed but not thrown — stay in Prepare
+}</div>
+    <div class="note">No per-frame gesture polling. HandController's Update() only runs during Prepare state to sample position and update color — all state transitions are event-driven via the plugin.</div>
+  </div>
+  <div class="card">
+    <p class="ct">Update() — runs only during Prepare</p>
+    <div class="cb">private void Update() {
+    if (CurrentState != HandState.Prepare) return;
+    if (!LeapInputBridge.Instance.IsTracked(side)) {
+        SetState(HandState.Idle);
+        return;
+    }
+    Vector3 norm = LeapInputBridge.Instance.GetNormalizedPosition(side);
+    CurrentColor = new Color(norm.x, norm.y, norm.z);
+    magicBall.SetColor(CurrentColor);   // updates renderer this frame
+}</div>
+  </div>
+  <div class="card">
+    <p class="ct">SetState() — internal transitions</p>
+    <div class="cb">private void SetState(HandState next) {
+    CurrentState = next;
+    switch (next) {
+        case HandState.Idle:
+            magicBall.SetHeld(false);
+            TimeScaleManager.Instance.ReleaseBulletTime(side);
+            break;
+        case HandState.Prepare:
+            magicBall.SetHeld(true);
+            TimeScaleManager.Instance.RequestBulletTime(side);
+            break;
+        case HandState.Fire:
+            Vector3 dir = LeapInputBridge.Instance.GetVelocity(side).normalized;
+            magicBall.Launch(CurrentColor, dir, PlayerStats.Instance);
+            // After launch, ball is in-flight — hand returns to Idle
+            SetState(HandState.Idle);
+            break;
+    }
+}</div>
+  </div>
+
+  <div class="sec">MagicBall.cs — MonoBehaviour (single class, full lifecycle)</div>
+  <div class="card changed">
+    <p class="ct">Design: one object, two phases</p>
+    <p class="cs">MagicBall exists on the hand anchor as a child object. During Prepare it is held (follows the hand anchor's transform). On Launch it is detached from the hand anchor, a Rigidbody is enabled, and it flies freely until it hits an enemy or expires. The same GameObject handles both phases — no instantiation on fire.</p>
+  </div>
+  <div class="card">
+    <p class="ct">Public API</p>
+    <div class="cb">// Called by HandController during Prepare:
+public void SetHeld(bool held)
+// held=true:  enable renderer, disable Rigidbody, follow hand anchor
+// held=false: disable renderer, keep Rigidbody disabled (Idle state)
+
+public void SetColor(Color color)
+// Updates material color via MaterialPropertyBlock (no allocation).
+// Also updates particle system color to match.
+
+// Called by HandController on Fire:
+public void Launch(Color color, Vector3 direction, PlayerStats stats)
+// 1. Detach from hand anchor (transform.SetParent(null))
+// 2. Enable Rigidbody, set velocity = direction * stats.ProjectileSpeed
+// 3. Store color and baseDamage for impact calculation
+// 4. Start lifetime coroutine — despawn after stats.ProjectileLifetime seconds</div>
+  </div>
+  <div class="card">
+    <p class="ct">Serialized fields</p>
+    <div class="cb">[SerializeField] private Rigidbody   rb;
+[SerializeField] private Renderer    ballRenderer;
+[SerializeField] private ParticleSystem heldParticles;    // glow while in hand
+[SerializeField] private ParticleSystem trailParticles;   // trail while in flight
+[SerializeField] private float       returnDelay = 3f;    // seconds before respawn</div>
+  </div>
+  <div class="card">
+    <p class="ct">Impact &amp; lifecycle</p>
+    <div class="cb">private void OnTriggerEnter(Collider other) {
+    var enemy = other.GetComponent&lt;EnemyController&gt;();
+    if (enemy == null) return;
+    float dmg = ColorMath.ComputeDamage(storedBaseDamage, storedColor, enemy.EnemyColor);
+    enemy.TakeDamage(dmg);
+    StartCoroutine(RespawnAfterDelay());
+}
+
+private IEnumerator RespawnAfterDelay() {
+    // Hide ball, play impact particles
+    ballRenderer.enabled = false;
+    yield return new WaitForSeconds(returnDelay);
+    // Re-attach to hand anchor, reset state
+    transform.SetParent(handAnchor);
+    transform.localPosition = Vector3.zero;
+    rb.velocity = Vector3.zero;
+    rb.isKinematic = true;
+    ballRenderer.enabled = false;  // stays hidden until next Prepare
+}
+
+// Private fields set on Launch:
+private Color  storedColor;
+private float  storedBaseDamage;
+private Transform handAnchor;  // set in Awake, used for re-parenting</div>
+    <div class="note">After impact the ball returns to the hand anchor after a short delay, ready for the next Prepare cycle. This avoids instantiate/destroy overhead and gives a natural "cooldown feel" — the player can see their ball flying back.</div>
+  </div>
+</div>
+
+<!-- COMBAT -->
+<div id="p-combat" class="pane">
+  <div class="sec">ColorMath.cs — static utility class (unchanged)</div>
+  <div class="card">
+    <p class="ct">Core functions</p>
+    <div class="cb">public static class ColorMath {
+
+    // Perceptual inverse: hue shifts 180 degrees, S and V preserved.
+    public static Color Inverse(Color c) {
+        Color.RGBToHSV(c, out float h, out float s, out float v);
+        return Color.HSVToRGB((h + 0.5f) % 1f, s, v);
+    }
+
+    // 0-1 hue distance: 0 = same hue, 1 = opposite (180 degrees apart).
+    public static float HueDistance(Color a, Color b) {
+        Color.RGBToHSV(a, out float ha, out _, out _);
+        Color.RGBToHSV(b, out float hb, out _, out _);
+        float d = Mathf.Abs(ha - hb);
+        return Mathf.Min(d, 1f - d) * 2f;
+    }
+
+    // 1x damage at same color, up to maxMultiplier at inverse.
+    public static float ComputeDamage(float baseDmg, Color projectile, Color enemy,
+                                      float maxMultiplier = 3f) {
+        float dist = HueDistance(projectile, Inverse(enemy));
+        float mult = Mathf.Lerp(1f, maxMultiplier, 1f - dist);
+        return baseDmg * mult;
+    }
+
+    // HUD only — snaps continuous color to nearest named spell zone.
+    public static SpellType ClassifyColor(Color c) { ... }
+}
+
+public enum SpellType { Neutral, Red, Green, Blue, Yellow, Cyan, Magenta, White }</div>
+  </div>
+  <div class="card">
+    <p class="ct">Damage curve</p>
+    <p class="cs">Enemy color is a random hue at full saturation. Its inverse is always exactly 180° away. A perfectly matched inverse projectile deals 3× base damage. A same-color projectile deals 1× base damage. Colors in between scale linearly — no snap zones, no lookup table. Only hue matters, so the rule is simple enough to feel intuitively learnable.</p>
+  </div>
+</div>
+
+<!-- ENEMY -->
+<div id="p-enemy" class="pane">
+  <div class="sec">EnemyController.cs — MonoBehaviour (base class, unchanged)</div>
+  <div class="card">
+    <p class="ct">Public fields</p>
+    <div class="cb">public Color  EnemyColor;      // assigned by EnemySpawner at spawn
+public float  MaxHealth;
+public float  CoinReward;
+
+public float  CurrentHealth { get; private set; }
+public bool   IsDead        { get; private set; }
+
+public event Action&lt;EnemyController&gt; OnDeath;
+public event Action&lt;float&gt;           OnDamaged;
+
+public void Initialize(Color color, float health, float reward)
+public void TakeDamage(float amount)</div>
+  </div>
+  <div class="card">
+    <p class="ct">Subclasses</p>
+    <div class="g2" style="margin-top:6px">
+      <div class="sub-card"><p class="sc-t">WalkerEnemy</p><p class="sc-d">NavMeshAgent, walks toward player, melee on arrival. Fields: moveSpeed, meleeDamage, meleeRange.</p></div>
+      <div class="sub-card"><p class="sc-t">RangedEnemy</p><p class="sc-d">Stops at fireRange, fires own projectiles on a timer. Fields: fireRate, projectilePrefab, fireRange.</p></div>
+      <div class="sub-card"><p class="sc-t">ChargerEnemy</p><p class="sc-d">Winds up then dashes in a straight line. Fields: chargeSpeed, chargeWindup.</p></div>
+      <div class="sub-card"><p class="sc-t">BossEnemy</p><p class="sc-d">Phase system: int CurrentPhase, float[] PhaseThresholds. OnPhaseChange event for visual/behavior transitions.</p></div>
+    </div>
+  </div>
+  <div class="sec">EnemySpawner.cs — unchanged</div>
+  <div class="card">
+    <div class="cb">public void StartWave(WaveConfig config)
+public event Action OnWaveComplete;
+
+// WaveConfig (ScriptableObject):
+//   EnemySpawnEntry[] entries
+//   EnemySpawnEntry: prefab, count, spawnInterval, delayFromWaveStart</div>
+  </div>
+</div>
+
+<!-- STAGE & SHOP -->
+<div id="p-stage" class="pane">
+  <div class="sec">StageManager.cs — unchanged</div>
+  <div class="card">
+    <div class="cb">public enum StagePhase {
+    WaveInProgress, BetweenWaves, Shop, BossStage, StageComplete, GameOver
+}
+
+public StagePhase CurrentPhase { get; private set; }
+public int        CurrentWave  { get; private set; }
+public int        CurrentArea  { get; private set; }
+
+[SerializeField] private WaveConfig[] waves;
+[SerializeField] private int          wavesBeforeBoss  = 3;
+[SerializeField] private float        betweenWaveDelay = 2f;
+
+public void StartArea(int areaIndex)
+public void OnShopClosed()
+public void AwardCoins(float amount)</div>
+  </div>
+  <div class="sec">PlayerStats.cs — unchanged</div>
+  <div class="card">
+    <div class="cb">public float ProjectileSpeed    => baseProjectileSpeed  * speedMult;
+public float Damage             => baseDamage           * damageMult;
+public float BulletTimeDuration => baseBulletTimeDuration + bulletTimeFlatAdd;
+public float Coins { get; set; }
+
+// Multipliers written by ShopManager:
+public float speedMult = 1f;   public float damageMult = 1f;
+public float bulletTimeFlatAdd = 0f;
+
+// Passive item flags:
+public bool hasPiercingShot = false;
+public bool hasDualCast     = false;
+public bool hasColorEcho    = false;</div>
+  </div>
+  <div class="sec">ShopManager.cs — unchanged</div>
+  <div class="card">
+    <div class="cb">public class ShopItem : ScriptableObject {
+    public string itemName; public string description;
+    public float cost;      public bool   isUnique;
+    public ItemType type;   public StatType stat;  public float value;
+}
+public enum ItemType  { StatUpgrade, PassiveItem }
+public enum StatType  { Damage, Speed, BulletTimeDuration, BulletTimeCooldown }
+
+public bool TryPurchase(ShopItem item)
+private void ApplyItem(ShopItem item)  // writes PlayerStats fields</div>
+  </div>
+</div>
+
+<!-- BULLET TIME -->
+<div id="p-time" class="pane">
+  <div class="sec">TimeScaleManager.cs — unchanged</div>
+  <div class="card">
+    <div class="cb">public static TimeScaleManager Instance { get; private set; }
+
+public void RequestBulletTime(HandSide requestor)
+// activePrepareCount++. If 0→1: targetTimeScale = bulletTimeScale.
+
+public void ReleaseBulletTime(HandSide requestor)
+// activePrepareCount--. If 1→0: targetTimeScale = 1.0f.
+
+[SerializeField] private float bulletTimeScale    = 0.25f;
+[SerializeField] private float transitionDuration = 0.12f;
+
+// Update() (unscaled):
+// Time.timeScale = Mathf.Lerp(Time.timeScale, targetTimeScale,
+//                             Time.unscaledDeltaTime / transitionDuration);</div>
+    <div class="note">HandController, MagicBall (while held), and LeapInputBridge all use Time.unscaledDeltaTime. The Rigidbody on MagicBall is only active during flight — and in-flight balls move through slowed time intentionally, which looks visually satisfying.</div>
+  </div>
+</div>
+
+<!-- DATA FLOW -->
+<div id="p-data" class="pane">
+  <div class="sec">State transitions — event-driven (v2)</div>
+  <div class="card changed">
+    <div class="cb">// Idle → Prepare:
+PoseDetector fires OnPoseDetected (PalmUp pose)
+  → HandController.OnPalmUpDetected()
+      → SetState(Prepare)
+          → magicBall.SetHeld(true)
+          → TimeScaleManager.RequestBulletTime(side)
+
+// Prepare → Idle (palm dropped):
+PoseDetector fires OnPoseLost (PalmUp pose)
+  → HandController.OnPalmUpLost()
+      → SetState(Idle)
+          → magicBall.SetHeld(false)
+          → TimeScaleManager.ReleaseBulletTime(side)
+
+// Prepare → Fire → Idle (throw):
+PoseDetector fires OnPoseDetected (Fist pose)
+  → HandController.OnFistDetected()
+      → velocity = LeapInputBridge.GetVelocity(side)
+      → if velocity.magnitude >= threshold:
+          → SetState(Fire)
+              → magicBall.Launch(color, dir, stats)
+              → SetState(Idle) immediately after</div>
+  </div>
+  <div class="sec">Per-frame color update — during Prepare only</div>
+  <div class="card">
+    <div class="cb">HandController.Update() (runs only when state == Prepare, unscaled time):
+  norm = LeapInputBridge.GetNormalizedPosition(side)
+  CurrentColor = new Color(norm.x, norm.y, norm.z)
+  magicBall.SetColor(CurrentColor)
+      → MaterialPropertyBlock._Color update on ballRenderer
+      → particle system color update
+  HUD.UpdateColorPreview(CurrentColor, ColorMath.ClassifyColor(CurrentColor))</div>
+  </div>
+  <div class="sec">Ball impact → reward chain</div>
+  <div class="card">
+    <div class="cb">MagicBall.OnTriggerEnter(enemy collider)  [during flight phase]
+  → ColorMath.ComputeDamage(storedBaseDamage, storedColor, enemy.EnemyColor)
+  → enemy.TakeDamage(damage)
+      → if health &lt;= 0: enemy.Die()
+          → OnDeath.Invoke(this)
+              → EnemySpawner.OnEnemyDied()
+                  → StageManager.AwardCoins(coinReward)
+                  → if all enemies dead: OnWaveComplete.Invoke()
+  → magicBall.StartCoroutine(RespawnAfterDelay())</div>
+  </div>
+  <div class="note" style="margin-top:8px">Compared to v1: no Projectile.cs, no instantiation on fire. The MagicBall detaches and reattaches instead. State transitions are pose-event callbacks rather than per-frame conditionals. LeapInputBridge is only polled inside Update() during Prepare, and once on fist detection for velocity — not every frame unconditionally.</div>
+</div>
+
+</div>
+<script>
+function sw(id) {
+  document.querySelectorAll('.sdd-tab').forEach((b,i) => {
+    const ids=['overview','input','hand','combat','enemy','stage','time','data'];
+    b.classList.toggle('on', ids[i]===id);
+  });
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  document.getElementById('p-'+id).classList.add('on');
+}
+</script>
