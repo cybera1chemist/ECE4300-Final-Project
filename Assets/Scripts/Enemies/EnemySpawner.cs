@@ -6,10 +6,11 @@ public class EnemySpawner : MonoBehaviour
     [Header("References")]
     public StageConfig config;
     public EnemyDatabase enemyDB;
-    public Transform player;
+    [SerializeField] private Transform spawnPoint;
+    
     [Header("Settings")]
-    public float spawnRadius = 10f; // 怪物生成在玩家多少距离外
     public int maxSpawnCount = 50;
+    [SerializeField] private float roadWidth = 0.2f;
 
     private int totalEnemy = 0;
 
@@ -68,8 +69,8 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < evt.spawnCount; i++)
         {
-            Vector3 offset = Random.insideUnitCircle.normalized * spawnRadius;
-            Vector3 pos = player.position + offset;
+            float offsetX = Random.Range(-roadWidth / 2f, roadWidth / 2f);
+            Vector3 pos = spawnPoint.position + new Vector3(offsetX, 0f, 0f);
 
             Instantiate(data.prefab, pos, Quaternion.identity);
         }
@@ -88,8 +89,8 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
-        Vector3 offset = Random.insideUnitCircle.normalized * spawnRadius;
-        Vector3 pos = player.position + offset;
+        float offsetX = Random.Range(-roadWidth / 2f, roadWidth / 2f);
+        Vector3 pos = spawnPoint.position + new Vector3(offsetX, 0f, 0f);
 
         Instantiate(data.prefab, pos, Quaternion.identity);
     }

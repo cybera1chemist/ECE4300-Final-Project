@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Projectile))]
 public class MagicBall : MonoBehaviour
 {
     [Header("Magic Ball Config")]
@@ -53,6 +52,7 @@ public class MagicBall : MonoBehaviour
         float b = 0.5f + delta.z / maxZ;
         return new Color(r, g, b, 1f);
     }
+    
 
     #region Public APIs
     public void SetColor(Color color)

@@ -7,6 +7,18 @@ public class EnemyController : MonoBehaviour
     [Header("Enemy Stats")]
     [SerializeField] private float moveSpeed = 2f;
 
+    [Header("References")]
+    [SerializeField] private SkinnedMeshRenderer meshRenderer;
+
+    private Color color;
+
+    private void Start()
+    {
+        // Assign a random hue color
+        color = Color.HSVToRGB(Random.value, 1f, 0.85f);
+        meshRenderer.material.color = color;
+    }
+
     private void FixedUpdate()
     {
         // move towards player
@@ -21,4 +33,8 @@ public class EnemyController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
         }
     }
+
+    #region Public APIs
+    public Color GetColor() => color;
+    #endregion
 }
