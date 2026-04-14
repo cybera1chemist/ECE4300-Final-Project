@@ -556,7 +556,7 @@ Transform:
   m_GameObject: {fileID: 395194955}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 50}
+  m_LocalPosition: {x: 0, y: 0, z: 20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2067,6 +2067,20 @@ MonoBehaviour:
   spawnPoint: {fileID: 395194956}
   maxSpawnCount: 50
   roadWidth: 2
+--- !u!114 &1895298054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895298051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d63cb603bbe578f4ba7342b78ad2e7ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletTimeScale: 0.1
+  transitionDuration: 0.12
 --- !u!4 &1927260859 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8329423370070765071, guid: 4577231256ebec149ac8882d93c98cda, type: 3}
@@ -2201,6 +2215,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8726363141094575284, guid: 86c43949a6b27d746986fc82cb2d1d33, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1895298053}
+    - targetCorrespondingSourceObject: {fileID: 8726363141094575284, guid: 86c43949a6b27d746986fc82cb2d1d33, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1895298054}
   m_SourcePrefab: {fileID: 100100000, guid: 86c43949a6b27d746986fc82cb2d1d33, type: 3}
 --- !u!1001 &3251560935738962008
 PrefabInstance:

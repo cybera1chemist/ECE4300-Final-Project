@@ -24,6 +24,8 @@ public class HandController : MonoBehaviour
     private bool hasBallInHand = false;
     private LeapInputBridge bridge;
 
+    private bool hasRequestedBulletTime = false;
+
     private void Start()
     {
         bridge = LeapInputBridge.Instance;
@@ -48,7 +50,11 @@ public class HandController : MonoBehaviour
     }
     public void OnPalmLost()
     {
-        
+        if (hasRequestedBulletTime)
+        {
+            TimescaleManager.Instance.ReleaseBulletTime();
+            hasRequestedBulletTime = false;
+        }
     }
 
     public void OnFistDetected()
@@ -81,16 +87,23 @@ public class HandController : MonoBehaviour
             case HandState.Idle:
                 Debug.Log("Player's " + side + " hand switched to idle state.");
 
-                hasBallInHand = false;
-
-                if (magicBall != null)
+                if (hasBallInHand && magicBall != null)
                 {
                     magicBall.Cancel();
+                    magicBall = null;
+                }
+                hasBallInHand = false;
+                if (hasRequestedBulletTime)
+                {
+                    TimescaleManager.Instance.ReleaseBulletTime();
+                    hasRequestedBulletTime = false;
                 }
                 break;
 
             case HandState.Prepare:
                 Debug.Log("Player's " + side + " hand switched to prepare state.");
+                TimescaleManager.Instance.RequestBulletTime();
+                hasRequestedBulletTime = true;
                 // Instantiate a new magic ball;
                 if (!hasBallInHand)
                 {
@@ -104,6 +117,12 @@ public class HandController : MonoBehaviour
                 Debug.Log("Player's " + side + " hand switched to fire state.");
                 Vector3 v = LeapInputBridge.Instance.GetVelocity(side);
                 magicBall.Launch(v);
+                hasBallInHand = false;
+                if (hasRequestedBulletTime)
+                {
+                    TimescaleManager.Instance.ReleaseBulletTime();
+                    hasRequestedBulletTime = false;
+                }
                 break;
         }
     }

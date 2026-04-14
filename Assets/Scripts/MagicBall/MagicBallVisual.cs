@@ -11,6 +11,13 @@ public class MagicBallVisual : MonoBehaviour
     private void Start()
     {
         SetColor(new Color(0.5f, 0.5f, 0.5f, 1f));
+
+        ParticleSystem[] allPS = GetComponentsInChildren<ParticleSystem>();
+        foreach (var ps in allPS)
+        {
+            var main = ps.main;
+            main.useUnscaledTime = true;
+        }
     }
 
     public void SetColor(Color color)

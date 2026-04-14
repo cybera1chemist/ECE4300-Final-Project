@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Projectile))]
 public class MagicBall : MonoBehaviour
 {
@@ -24,6 +23,7 @@ public class MagicBall : MonoBehaviour
     private HandSide side;
 
     private Vector3 initialPos;
+    private Vector3 velocity;
 
     private void Start()
     {
@@ -36,6 +36,7 @@ public class MagicBall : MonoBehaviour
         {
             lifetime -= Time.deltaTime;
             if (lifetime <= 0f)  Destroy(gameObject);
+            transform.position += velocity * Time.unscaledDeltaTime;
         } else
         {
             delta = transform.position - initialPos;
@@ -70,14 +71,12 @@ public class MagicBall : MonoBehaviour
         transform.position = palmPosition + palmNormal.normalized * distanceFromPalm;
     }
 
-    public void Launch(Vector3 velocity)
+    public void Launch(Vector3 v)
     {        
         if (launched) return;
         launched = true;
 
-        // Add velocity to the ball
-        Rigidbody rb = GetComponent<Rigidbody>();
-        rb.velocity = velocity;
+        velocity = v;
         
         // Add other effects later (e.g., particle, sound)
     }
