@@ -10,7 +10,7 @@ public class Projectile : MonoBehaviour
     private float damage = 10f;
     private MagicBall magicBall;
 
-     private void Start()
+    private void Start()
     {
         magicBall = GetComponent<MagicBall>();
     }
@@ -30,7 +30,7 @@ public class Projectile : MonoBehaviour
 
                     damage *= damageMultiplier;
                 }
-                enemyHealth.TakeDamage(damage);
+                enemyHealth.TakeDamage(damage, magicBall.GetColor());
             }
             Destroy(gameObject);
         }

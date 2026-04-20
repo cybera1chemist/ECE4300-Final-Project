@@ -8,7 +8,9 @@ public class EnemyHealth : MonoBehaviour
     private float curHP;
 
     [Header("UI")]
+    [SerializeField] private GameObject uiRoot;
     [SerializeField] private Image hpBarFill;
+    [SerializeField] private GameObject damageNumberPrefab;
 
     private void Start()
     {
@@ -16,10 +18,13 @@ public class EnemyHealth : MonoBehaviour
         UpdateHPBar();
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, Color magicBallColor)
     {
         curHP -= damage;
+
+        // UI
         UpdateHPBar();
+        SpawnDamageNumber(damage, magicBallColor);
 
         if (curHP <= 0)
         {
@@ -32,7 +37,15 @@ public class EnemyHealth : MonoBehaviour
         if (hpBarFill != null)  hpBarFill.fillAmount = Mathf.Max(0, curHP / maxHP);
     }
 
-        private void Die()
+    private void SpawnDamageNumber(float damage, Color magicBallColor)
+    {
+        Vector3 spawnPos = uiRoot.transform.position + new Vector3(Random.Range(-0.3f, 0.3f), 0, 0);
+        GameObject dmgNumObj = Instantiate(damageNumberPrefab.gameObject, spawnPos,
+                                Quaternion.identity, uiRoot.transform);
+        dmgNumObj.GetComponent<DamageNumber>().Init(damage, magicBallColor);
+    }
+
+    private void Die()
     {
         Destroy(gameObject);
     }
