@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour
@@ -11,6 +12,8 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private GameObject uiRoot;
     [SerializeField] private Image hpBarFill;
     [SerializeField] private GameObject damageNumberPrefab;
+
+    public UnityEvent OnDeath;
 
     private void Start()
     {
@@ -47,6 +50,7 @@ public class EnemyHealth : MonoBehaviour
 
     private void Die()
     {
+        OnDeath?.Invoke();
         Destroy(gameObject);
     }
 }
