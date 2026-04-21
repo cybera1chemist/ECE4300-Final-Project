@@ -42,15 +42,16 @@ public class EnemyHealth : MonoBehaviour
 
     private void SpawnDamageNumber(float damage, Color magicBallColor)
     {
-        Vector3 spawnPos = uiRoot.transform.position + new Vector3(Random.Range(-0.3f, 0.3f), 0, 0);
-        GameObject dmgNumObj = Instantiate(damageNumberPrefab.gameObject, spawnPos,
-                                Quaternion.identity, uiRoot.transform);
+        Vector3 spawnPos = uiRoot.transform.position + new Vector3(Random.Range(-0.1f, 0.1f), 0.25f, 0);
+        GameObject dmgNumObj = Instantiate(damageNumberPrefab, spawnPos,
+                                Quaternion.identity, null);
         dmgNumObj.GetComponent<DamageNumber>().Init(damage, magicBallColor);
     }
 
     private void Die()
     {
         OnDeath?.Invoke();
+
         Destroy(gameObject);
     }
 }

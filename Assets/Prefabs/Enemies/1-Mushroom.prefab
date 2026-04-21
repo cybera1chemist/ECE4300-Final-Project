@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
+  CoinReward: 1
   meshRenderer: {fileID: 5911659372781817698}
 --- !u!114 &2962449594777251369
 MonoBehaviour:
@@ -66,7 +67,10 @@ MonoBehaviour:
   maxHP: 10
   uiRoot: {fileID: 8131614903896457066}
   hpBarFill: {fileID: 3405976851516762946}
-  damageNumberPrefab: {fileID: 5044441786920280739, guid: 13480be578c9e2b4c97a193750fa83a8, type: 3}
+  damageNumberPrefab: {fileID: 1242667463862049406, guid: 46014f904f9f642488a77e803fa1c6a9, type: 3}
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!54 &1373916996330383280
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -851,11 +855,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6704439187487918649, guid: e91583cd850d2da40aa5d5f7a972e29b, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6704439187487918649, guid: e91583cd850d2da40aa5d5f7a972e29b, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6704439187487918649, guid: e91583cd850d2da40aa5d5f7a972e29b, type: 3}
       propertyPath: m_LocalPosition.x
