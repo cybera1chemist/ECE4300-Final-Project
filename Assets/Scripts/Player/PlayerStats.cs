@@ -8,7 +8,11 @@ public class PlayerStats : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI coinsText;
 
-    public float coins {get; private set;} // In background coins is float, but when shown to player it's int
+    public float BaseDamage {get; private set;}
+    public float Defense {get; private set;}
+    public float MaxHP {get; private set;}
+
+    public float Coins {get; private set;} // In background coins is float, but when shown to player it's int
 
     private void Awake()
     {
@@ -27,23 +31,27 @@ public class PlayerStats : MonoBehaviour
     
     private void UpdateUI()
     {
-        coinsText.text = ((int)coins).ToString();
+        coinsText.text = ((int)Coins).ToString();
     }
 
     #region public API
     public void AddCoins(float amount)
     {
-        coins += amount;
+        Coins += amount;
         UpdateUI();
     }
 
     public bool SpendCoins(float amount)
     {
-        if (coins < amount) return false;
-        coins -= amount;
+        if (Coins < amount) return false;
+        Coins -= amount;
         UpdateUI();
         return true;
     }
+
+    public void AddDamage(float amount) => BaseDamage += amount;
+    public void AddDefense(float amount) => Defense += amount;
+    public void AddMaxHP(float amount) => MaxHP += amount;
  
     #endregion
 }
