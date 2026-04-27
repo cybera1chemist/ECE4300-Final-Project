@@ -77,6 +77,7 @@ public class MagicBall : MonoBehaviour
         launched = true;
 
         velocity = v;
+        velocity.y = 0f; // Can't move along y-axis
         
         // Add other effects later (e.g., particle, sound)
     }
