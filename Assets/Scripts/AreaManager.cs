@@ -34,9 +34,18 @@ public class AreaManager : MonoBehaviour
 
     public void StageComplete()
     {
+        
         // switch to shop scene
+        Debug.Log($"Stage {CurStageIndex} complete! Loading shop scene...");
         UnityEngine.SceneManagement.SceneManager.LoadScene(shopSceneName);
         CurStageIndex++;
+    }
+
+    public void ExitShop()
+    {
+        // switch to stage scene
+        Debug.Log($"Exiting shop, loading stage scene for stage {CurStageIndex}...");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(stageSceneName);
     }
 
     #region public API for get

@@ -27,7 +27,7 @@ public class GameFlow : MonoBehaviour
         int seconds = (int)(_timer % 60);
         timeText.text = $"{minutes:D2} : {seconds:D2}";
 
-        if (_timer < 0f){
+        if (_timer <= 0f){
             stageCompleted = true;
             AreaManager.Instance.StageComplete();  
         }

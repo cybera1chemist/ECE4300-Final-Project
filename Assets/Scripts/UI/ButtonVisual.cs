@@ -30,7 +30,6 @@ public class ButtonVisual : MonoBehaviour
 
     public void OnClick()
     {
-        Debug.Log("Button clicked.");
         rd.material = clickedMaterial;
     }
 

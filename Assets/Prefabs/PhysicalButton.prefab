@@ -373,7 +373,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6690543558420774076, guid: 43eaa06112baf304ba03b0e3634d568d, type: 3}
       propertyPath: OnHandHover.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClick
+      value: OnHovered
       objectReference: {fileID: 0}
     - target: {fileID: 6690543558420774076, guid: 43eaa06112baf304ba03b0e3634d568d, type: 3}
       propertyPath: OnHandHoverExit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -393,11 +393,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6690543558420774076, guid: 43eaa06112baf304ba03b0e3634d568d, type: 3}
       propertyPath: OnButtonPressed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnHovered
+      value: OnClick
       objectReference: {fileID: 0}
     - target: {fileID: 6690543558420774076, guid: 43eaa06112baf304ba03b0e3634d568d, type: 3}
       propertyPath: OnHandHoverExit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickLeave
+      value: OnHoverLeave
       objectReference: {fileID: 0}
     - target: {fileID: 6690543558420774076, guid: 43eaa06112baf304ba03b0e3634d568d, type: 3}
       propertyPath: OnButtonUnPressed.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -405,7 +405,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6690543558420774076, guid: 43eaa06112baf304ba03b0e3634d568d, type: 3}
       propertyPath: OnButtonUnPressed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnHoverLeave
+      value: OnClickLeave
       objectReference: {fileID: 0}
     - target: {fileID: 6690543558420774076, guid: 43eaa06112baf304ba03b0e3634d568d, type: 3}
       propertyPath: OnHandHover.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

@@ -15,3 +15,5 @@ MonoBehaviour:
   areaID: 1
   stageConfigs:
   - {fileID: 11400000, guid: 77b7f4bc78071d64ebc93260b3081eb7, type: 2}
+  - {fileID: 11400000, guid: f511400792e688b4784f254b2510379b, type: 2}
+  - {fileID: 11400000, guid: b8e5371d959fc2045bf3772440064076, type: 2}
