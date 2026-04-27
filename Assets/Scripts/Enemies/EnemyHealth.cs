@@ -50,6 +50,8 @@ public class EnemyHealth : MonoBehaviour
 
     private void Die()
     {
+        SoundManager.Instance?.PlayEnemyDeathCoinSFX(); //activate the baojinbi coin sound effect (on soundmanager object)
+
         OnDeath?.Invoke();
 
         Destroy(gameObject);
