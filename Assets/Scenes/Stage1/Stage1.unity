@@ -1007,7 +1007,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 1887522579}
   healthText: {fileID: 112600583}
-  maxHealth: 100
 --- !u!4 &506385845
 Transform:
   m_ObjectHideFlags: 0
@@ -5159,7 +5158,7 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 9039218978036464921, guid: 986bf08e0a6f2a2478657c5b3d825cc0, type: 3}
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
