@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class EnemySpawner : MonoBehaviour
     public StageConfig config;
     public EnemyDatabase enemyDB;
     [SerializeField] private Transform spawnPoint;
+    [SerializeField] private TextMeshProUGUI stageText;
     
     [Header("Settings")]
     public int maxSpawnCount = 50;
@@ -19,6 +21,12 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
+        if (AreaManager.Instance != null)
+        {
+            config = AreaManager.Instance.GetCurStageConfig();
+            stageText.text = $"Stage {AreaManager.Instance.CurStageIndex + 1}";
+        }
+
         foreach (var evt in config.spawnEvents)
         {
             // 对于循环生成事件，安排下一次生成时间
@@ -69,8 +77,8 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < evt.spawnCount; i++)
         {
-            float offsetX = Random.Range(-roadWidth / 2f, roadWidth / 2f);
-            Vector3 pos = spawnPoint.position + new Vector3(offsetX, 0f, 0f);
+            float offsetZ = Random.Range(-roadWidth / 2f, roadWidth / 2f);
+            Vector3 pos = spawnPoint.position + new Vector3(0f, 0f, offsetZ);
 
             Instantiate(data.prefab, pos, Quaternion.identity);
         }
@@ -80,19 +88,6 @@ public class EnemySpawner : MonoBehaviour
     public void AddTotalEnemy() => totalEnemy++;
     public void RemoveTotalEnemy() => totalEnemy--;
 
-    public void SpawnSingleEnemy(int enemyId)
-    {
-        var data = enemyDB.GetEnemy(enemyId);
-        if (!data)
-        {
-            Debug.LogWarning("No EnemyData found for id: " + enemyId);
-            return;
-        }
 
-        float offsetX = Random.Range(-roadWidth / 2f, roadWidth / 2f);
-        Vector3 pos = spawnPoint.position + new Vector3(offsetX, 0f, 0f);
-
-        Instantiate(data.prefab, pos, Quaternion.identity);
-    }
     #endregion
 }

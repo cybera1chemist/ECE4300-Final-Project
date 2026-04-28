@@ -86,5 +86,10 @@ public class PlayerStats : MonoBehaviour
         coinsText = text;
         UpdateUI();
     }
+    public void BindHPBar(PlayerHPBar playerHpBar)
+    {
+        hpBar = playerHpBar;
+        UpdateUI();
+    }
     #endregion
 }

@@ -9,7 +9,7 @@ public class EnemyController : MonoBehaviour
 
     private float lastDamageTime = 0f; // 上次伤害的时间
     private PlayerHealth playerHealth; // 引用玩家血量脚本
-    private Vector3 playerPosition = Vector3.zero; // 玩家位置 (0, 0, 0)
+    private Vector3 playerPosition = new(2, 0, 0);
 
     [Header("Rewards")]
     [SerializeField] private int CoinReward = 1;
@@ -33,15 +33,13 @@ public class EnemyController : MonoBehaviour
         color = Color.HSVToRGB(Random.value, 1f, 0.85f);
         meshRenderer.material.color = color;
         playerHealth = FindObjectOfType<PlayerHealth>();
-        playerPosition = Vector3.zero; // 初始化玩家位置
     }
 
     private void FixedUpdate()
     {
         if (PlayerHealth.isGameOver) return;
         // move towards player
-        // player is always at (0, 0, 0)
-        Vector3 direction = (Vector3.zero - transform.position).normalized;
+        Vector3 direction = (playerPosition - transform.position).normalized;
         transform.position += moveSpeed * Time.fixedDeltaTime * direction;
 
         // rotate to face player
@@ -51,11 +49,10 @@ public class EnemyController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
         }
 
-        // 检查怪物是否接近玩家（(0, 0, 0)）
+        // 检查怪物是否接近玩家
         if (Vector3.Distance(transform.position, playerPosition) < 0.5f) // 假设距离小于 0.5 时触发伤害
         {
             ApplyDamage();
-            Debug.Log("Applying damage to player");
         }
     }
 
@@ -67,8 +64,8 @@ public class EnemyController : MonoBehaviour
         {
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(damage); // 触发玩家扣血
-                lastDamageTime = Time.time; // 记录伤害的时间
+                playerHealth.TakeDamage(damage);
+                lastDamageTime = Time.time;
             }
         }
     }

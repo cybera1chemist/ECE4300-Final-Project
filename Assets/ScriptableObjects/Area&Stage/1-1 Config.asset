@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   belongToArea: 1
   stageID: 1
-  maxTimeMinute: 100
+  maxTimeMinute: 0.5
   spawnEvents:
   - startMinute: 0
     endMinute: 10
     enemyId: 1
-    spawnInterval: 3
+    spawnInterval: 4
     spawnCount: 1
     spawnOnce: 0

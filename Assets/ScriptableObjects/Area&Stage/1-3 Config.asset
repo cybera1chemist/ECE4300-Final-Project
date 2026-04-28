@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   belongToArea: 1
   stageID: 3
-  maxTimeMinute: 0.3
+  maxTimeMinute: 1.5
   spawnEvents:
   - startMinute: 0
     endMinute: 10
