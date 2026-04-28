@@ -6,6 +6,11 @@ public class PlayerStats : MonoBehaviour
 {
     public static PlayerStats Instance { get; private set; }
 
+    [Header("Base Stats")]
+    [SerializeField] private float baseDamage;
+    [SerializeField] private float defense;
+    [SerializeField] private float maxHP;
+
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI coinsText;
     [SerializeField] private PlayerHPBar hpBar;
@@ -27,7 +32,12 @@ public class PlayerStats : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
 
+        BaseDamage = baseDamage;
+        Defense = defense;
+        MaxHP = maxHP;
+
         health = GetComponent<PlayerHealth>();
+        health.SetMaxHP(MaxHP);
     }
 
     private void Start()
@@ -35,7 +45,7 @@ public class PlayerStats : MonoBehaviour
         UpdateUI();
     }
     
-    private void UpdateUI()
+    public void UpdateUI()
     {
         // update coins
         if (coinsText != null) coinsText.text = ((int)Coins).ToString();
@@ -65,6 +75,7 @@ public class PlayerStats : MonoBehaviour
     public void AddMaxHP(float amount) {
         MaxHP += amount;
         health.SetMaxHP(MaxHP);
+        UpdateUI();
     }
  
     #endregion

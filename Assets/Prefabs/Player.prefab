@@ -1235,9 +1235,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 356bf5f7d5742bc4689016c6ca19682c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  healthUI: {fileID: 0}
-  gameOverUI: {fileID: 0}
 --- !u!114 &5899091962064181680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1250,6 +1247,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd4187993aa7d97439b8813c2f84040b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseDamage: 10
+  defense: 1
+  maxHP: 100
   coinsText: {fileID: 0}
   hpBar: {fileID: 0}
 --- !u!1 &3740281219323542397
