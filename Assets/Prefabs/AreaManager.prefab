@@ -47,3 +47,5 @@ MonoBehaviour:
   areaConfig: {fileID: 11400000, guid: 33f43fe6d55bea9499e5a41c89f893c7, type: 2}
   stageSceneName: Scenes/Areas/Area1
   shopSceneName: Scenes/Shop/Shop
+  titleSceneName: Scenes/Other/Title
+  gameOverSceneName: Scenes/Other/GameOver

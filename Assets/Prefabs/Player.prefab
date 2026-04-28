@@ -1153,6 +1153,8 @@ GameObject:
   - component: {fileID: 1253399217612918132}
   - component: {fileID: 3474629621545269761}
   - component: {fileID: 625087049435878544}
+  - component: {fileID: 8598848975815661737}
+  - component: {fileID: 5899091962064181680}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1170,7 +1172,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7236542812467697009}
@@ -1221,6 +1223,35 @@ CapsuleCollider:
   m_Height: 1.882848
   m_Direction: 1
   m_Center: {x: 0, y: 0.98, z: 0}
+--- !u!114 &8598848975815661737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3599185283469545067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 356bf5f7d5742bc4689016c6ca19682c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  healthUI: {fileID: 0}
+  gameOverUI: {fileID: 0}
+--- !u!114 &5899091962064181680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3599185283469545067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd4187993aa7d97439b8813c2f84040b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinsText: {fileID: 0}
+  hpBar: {fileID: 0}
 --- !u!1 &3740281219323542397
 GameObject:
   m_ObjectHideFlags: 0

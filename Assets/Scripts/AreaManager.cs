@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AreaManager : MonoBehaviour
@@ -11,6 +9,8 @@ public class AreaManager : MonoBehaviour
     [Header("Scene Transition")]
     [SerializeField] private string stageSceneName;
     [SerializeField] private string shopSceneName = "Scenes/Shop/Shop";
+    [SerializeField] private string titleSceneName = "Scenes/Other/TitleScene";
+    [SerializeField] private string gameOverSceneName = "Scenes/Other/GameOver";
 
     public int CurStageIndex { get; private set; }
 
@@ -21,22 +21,23 @@ public class AreaManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    void Start()
+    private void Start()
     {
-        
+        Debug.Log("Area Manager is ready!");
     }
 
-    // Update is called once per frame
-    void Update()
+    public void StartArea()
     {
-        
+        CurStageIndex = 0;
+        Debug.Log($"[AreaManager] Starting area with stage {CurStageIndex+1}. Loading stage scene...");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(stageSceneName);
     }
 
     public void StageComplete()
     {
         
         // switch to shop scene
-        Debug.Log($"Stage {CurStageIndex} complete! Loading shop scene...");
+        Debug.Log($"[AreaManager] Stage {CurStageIndex+1} complete! Loading shop scene...");
         UnityEngine.SceneManagement.SceneManager.LoadScene(shopSceneName);
         CurStageIndex++;
     }
@@ -44,8 +45,20 @@ public class AreaManager : MonoBehaviour
     public void ExitShop()
     {
         // switch to stage scene
-        Debug.Log($"Exiting shop, loading stage scene for stage {CurStageIndex}...");
+        Debug.Log($"[AreaManager] Exiting shop, loading stage scene for stage {CurStageIndex+1}...");
         UnityEngine.SceneManagement.SceneManager.LoadScene(stageSceneName);
+    }
+
+    public void GameOver()
+    {
+        Debug.Log($"[AreaManager] Game over! Loading the game over scene...");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(gameOverSceneName);
+    }
+
+    public void ReturnToTitle()
+    {
+        Debug.Log($"[AreaManager] Returning to title scene...");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(titleSceneName);
     }
 
     #region public API for get

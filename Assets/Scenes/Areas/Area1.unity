@@ -15729,18 +15729,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 1763137830}
     m_Modifications:
     - target: {fileID: 1253399217612918132, guid: 986bf08e0a6f2a2478657c5b3d825cc0, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1253399217612918132, guid: 986bf08e0a6f2a2478657c5b3d825cc0, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1253399217612918132, guid: 986bf08e0a6f2a2478657c5b3d825cc0, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1253399217612918132, guid: 986bf08e0a6f2a2478657c5b3d825cc0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -15780,14 +15768,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2746531110357849401, guid: 986bf08e0a6f2a2478657c5b3d825cc0, type: 3}
-      propertyPath: coinsText
-      value: 
-      objectReference: {fileID: 1775570106}
     - target: {fileID: 3599185283469545067, guid: 986bf08e0a6f2a2478657c5b3d825cc0, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5899091962064181680, guid: 986bf08e0a6f2a2478657c5b3d825cc0, type: 3}
+      propertyPath: hpBar
+      value: 
+      objectReference: {fileID: 2091221310}
+    - target: {fileID: 5899091962064181680, guid: 986bf08e0a6f2a2478657c5b3d825cc0, type: 3}
+      propertyPath: coinsText
+      value: 
+      objectReference: {fileID: 1775570106}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
