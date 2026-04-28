@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "ECE4300-Final-Project.sln"
+    "dotnet.defaultSolution": "ECE4300 Project.sln"
 }
