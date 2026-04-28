@@ -19,6 +19,6 @@ MonoBehaviour:
   - startMinute: 0
     endMinute: 10
     enemyId: 1
-    spawnInterval: 1
+    spawnInterval: 2
     spawnCount: 1
     spawnOnce: 0

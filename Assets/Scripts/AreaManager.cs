@@ -9,8 +9,9 @@ public class AreaManager : MonoBehaviour
     [Header("Scene Transition")]
     [SerializeField] private string stageSceneName;
     [SerializeField] private string shopSceneName = "Scenes/Shop/Shop";
-    [SerializeField] private string titleSceneName = "Scenes/Other/TitleScene";
+    [SerializeField] private string titleSceneName = "Scenes/Other/Title";
     [SerializeField] private string gameOverSceneName = "Scenes/Other/GameOver";
+    [SerializeField] private string winSceneName = "Scenes/Other/Win";
 
     public int CurStageIndex { get; private set; }
 
@@ -35,6 +36,12 @@ public class AreaManager : MonoBehaviour
 
     public void StageComplete()
     {
+        if (CurStageIndex >= areaConfig.stageConfigs.Count)
+        {
+            Debug.LogError($"[AreaManager] All stages in the area are already completed! CurStageIndex: {CurStageIndex}");
+            UnityEngine.SceneManagement.SceneManager.LoadScene(winSceneName);
+            return;
+        }
         
         // switch to shop scene
         Debug.Log($"[AreaManager] Stage {CurStageIndex+1} complete! Loading shop scene...");

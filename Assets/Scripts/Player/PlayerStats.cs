@@ -79,4 +79,12 @@ public class PlayerStats : MonoBehaviour
     }
  
     #endregion
+
+    #region Bind UI
+    public void BindCoinsText(TextMeshProUGUI text)
+    {
+        coinsText = text;
+        UpdateUI();
+    }
+    #endregion
 }

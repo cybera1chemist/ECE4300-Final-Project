@@ -132,11 +132,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2081015030725777342, guid: 04fbfff21175027458ee4631e73764af, type: 3}
       propertyPath: m_text
-      value: Retry
+      value: Play Again
+      objectReference: {fileID: 0}
+    - target: {fileID: 2081015030725777342, guid: 04fbfff21175027458ee4631e73764af, type: 3}
+      propertyPath: m_fontSize
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 2081015030725777342, guid: 04fbfff21175027458ee4631e73764af, type: 3}
       propertyPath: m_fontStyle
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2081015030725777342, guid: 04fbfff21175027458ee4631e73764af, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 3005744403816619690, guid: 04fbfff21175027458ee4631e73764af, type: 3}
       propertyPath: OnButtonPressed.m_PersistentCalls.m_Calls.Array.size
@@ -220,7 +228,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3399621903939972250, guid: 04fbfff21175027458ee4631e73764af, type: 3}
       propertyPath: m_Name
-      value: StartButton
+      value: PlayAgainButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -321,7 +329,7 @@ GameObject:
   - component: {fileID: 440860670}
   - component: {fileID: 440860669}
   m_Layer: 0
-  m_Name: BGM_Gameover
+  m_Name: BGM_Win
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -449,7 +457,7 @@ GameObject:
   - component: {fileID: 955883802}
   - component: {fileID: 955883803}
   m_Layer: 0
-  m_Name: GameOverSceneManager
+  m_Name: WinSceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -701,7 +709,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Mission Failed
+  m_text: You Win
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5261,7 +5269,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f3ee68055e68e5e4daa8876ab034036b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8c3a8ffa8f8d6a340a7661615fe7daa2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
