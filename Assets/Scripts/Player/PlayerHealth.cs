@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
+<<<<<<< HEAD
     [Header("Health Settings")]
     public float maxHealth = 100f;
 
@@ -196,4 +197,21 @@ public class PlayerHealth : MonoBehaviour
 
         Debug.Log("[PlayerHealth] Time.timeScale set to 0.");
     }
+=======
+    private float maxHP;
+    private float curHP;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        maxHP = PlayerStats.Instance.MaxHP;
+    }
+
+
+    #region public API
+    public float GetMaxHP() => maxHP;
+    public void SetMaxHP(float hp) => maxHP = hp;
+    public float GetCurHP() => curHP;
+    #endregion
+>>>>>>> dev
 }

@@ -7,6 +7,7 @@ public class MagicBallVisual : MonoBehaviour
     [Header("References")]
     [SerializeField] private ParticleSystem head;
     [SerializeField] private ParticleSystem particle;
+    [SerializeField] private Light magicLight;
 
     private void Start()
     {
@@ -29,5 +30,8 @@ public class MagicBallVisual : MonoBehaviour
         // Set particle color
         var particleMain = particle.main;
         particleMain.startColor = color;
+
+        // Set light color
+        magicLight.color = color;
     }
 }

@@ -1,14 +1,22 @@
 using TMPro;
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerHealth))]
 public class PlayerStats : MonoBehaviour
 {
     public static PlayerStats Instance { get; private set; }
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI coinsText;
+    [SerializeField] private PlayerHPBar hpBar;
 
-    public float coins {get; private set;} // In background coins is float, but when shown to player it's int
+    public float BaseDamage {get; private set;}
+    public float Defense {get; private set;}
+    public float MaxHP {get; private set;}
+
+    public float Coins {get; private set;} // In background coins is float, but when shown to player it's int
+
+    private PlayerHealth health;
 
     private void Awake()
     {
@@ -18,6 +26,8 @@ public class PlayerStats : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
+
+        health = GetComponent<PlayerHealth>();
     }
 
     private void Start()
@@ -27,22 +37,34 @@ public class PlayerStats : MonoBehaviour
     
     private void UpdateUI()
     {
-        coinsText.text = ((int)coins).ToString();
+        // update coins
+        if (coinsText != null) coinsText.text = ((int)Coins).ToString();
+
+        // update healthBar
+        if (hpBar != null) hpBar.UpdateUI(health.GetCurHP(), MaxHP);
+
     }
 
     #region public API
     public void AddCoins(float amount)
     {
-        coins += amount;
+        Coins += amount;
         UpdateUI();
     }
 
     public bool SpendCoins(float amount)
     {
-        if (coins < amount) return false;
-        coins -= amount;
+        if (Coins < amount) return false;
+        Coins -= amount;
         UpdateUI();
         return true;
+    }
+
+    public void AddDamage(float amount) => BaseDamage += amount;
+    public void AddDefense(float amount) => Defense += amount;
+    public void AddMaxHP(float amount) {
+        MaxHP += amount;
+        health.SetMaxHP(MaxHP);
     }
  
     #endregion
